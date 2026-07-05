@@ -1,0 +1,66 @@
+### 2. Prueba de seguridad (debe fallar sin header)
+GET http://localhost:8080/polizas
+
+### 3a. Listar todas las pólizas
+GET http://localhost:8080/polizas
+x-api-key: 123456
+
+### 3b. Listar pólizas COLECTIVAS
+GET http://localhost:8080/polizas?tipo=COLECTIVA
+x-api-key: 123456
+
+### 3c. Listar pólizas INDIVIDUALES y ACTIVAS
+GET http://localhost:8080/polizas?tipo=INDIVIDUAL&estado=ACTIVA
+x-api-key: 123456
+
+### 4. Listar riesgos de la póliza 2 (Colectiva)
+GET http://localhost:8080/polizas/2/riesgos
+x-api-key: 123456
+
+### 5. Renovar póliza 1 (Caso feliz)
+POST http://localhost:8080/polizas/1/renovar
+x-api-key: 123456
+
+### 6. Renovar póliza cancelada 3 (Debe fallar)
+POST http://localhost:8080/polizas/3/renovar
+x-api-key: 123456
+
+### 7. Agregar riesgo a póliza individual 1 (Debe fallar)
+POST http://localhost:8080/polizas/1/riesgos
+x-api-key: 123456
+Content-Type: application/json
+
+{
+    "descripcion": "intento invalido"
+}
+
+### 8. Agregar riesgo a póliza colectiva 2 (Caso feliz)
+POST http://localhost:8080/polizas/2/riesgos
+x-api-key: 123456
+Content-Type: application/json
+
+{
+    "descripcion": "Nuevo riesgo empleado C"
+}
+
+### 9a. Cancelar póliza 2
+POST http://localhost:8080/polizas/2/cancelar
+x-api-key: 123456
+
+### 9b. Verificar que los riesgos de la póliza 2 quedaron cancelados
+GET http://localhost:8080/polizas/2/riesgos
+x-api-key: 123456
+
+### 10. Cancelar un riesgo puntual (ID 1)
+POST http://localhost:8080/riesgos/1/cancelar
+x-api-key: 123456
+
+### 11. Mock del CORE
+POST http://localhost:8080/core-mock/evento
+x-api-key: 123456
+Content-Type: application/json
+
+{
+    "evento": "ACTUALIZACION",
+    "polizaId": 555
+}
