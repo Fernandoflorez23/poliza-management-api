@@ -2,6 +2,31 @@
 
 API REST construida con **Spring Boot 3 / Java 17** para la gestión de pólizas y sus riesgos asociados. Implementa una arquitectura por capas (`controller` → `service` → `repository` → `entity`), validaciones de negocio y una capa de seguridad mínima basada en API Key.
 
+## Tecnologías utilizadas
+
+- Java 17
+- Spring Boot 3.2
+- Spring Data JPA
+- Spring Validation
+- H2 Database (en memoria)
+- Maven
+- Lombok
+
+## Arquitectura
+
+El proyecto sigue una arquitectura por capas:
+
+```
+Controller  →  Service  →  Repository  →  Base de datos
+```
+
+- **Controller**: expone los endpoints REST y delega toda la lógica a la capa Service, sin validaciones de negocio en este nivel.
+- **Service**: concentra las reglas de negocio (renovación, cancelación en cascada, validación de tipo de póliza) y la orquestación transaccional (`@Transactional`).
+- **Repository**: acceso a datos vía Spring Data JPA, sin lógica adicional.
+- **Entity**: modelo de dominio (`Poliza`, `Riesgo`) con sus relaciones y enums de estado.
+
+Además, la integración con el CORE legado se aísla en un componente de tipo *mock/adapter* (`CoreMockClient`), y los errores de negocio se centralizan en un `GlobalExceptionHandler`, evitando manejo de excepciones disperso en los controllers.
+
 ## 1. Requisitos
 
 - Java 17+
